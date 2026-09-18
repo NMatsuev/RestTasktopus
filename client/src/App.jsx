@@ -13,6 +13,7 @@ export default function App() {
   const [statusFilter, setStatusFilter] = useState('');
   const [search, setSearch] = useState('');
   const [notice, setNotice] = useState(null);
+  const [resetToken, setResetToken] = useState(0);
 
   const loadTasks = useCallback(async () => {
     setLoading(true);
@@ -55,6 +56,7 @@ export default function App() {
         showNotice('Задача создана');
       }
       setEditingTask(null);
+      setResetToken((t) => t + 1);
       await loadTasks();
     } catch (err) {
       handleError(err);
@@ -91,6 +93,7 @@ export default function App() {
             onSubmit={handleSubmit}
             onCancel={() => setEditingTask(null)}
             submitting={submitting}
+            resetToken={resetToken}
           />
         </section>
 

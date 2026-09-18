@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const STATUS_OPTIONS = [
   { value: 'todo', label: 'Не начато' },
@@ -15,9 +15,15 @@ const emptyForm = {
   removeAttachment: false,
 };
 
-export default function TaskForm({ editingTask, onSubmit, onCancel, submitting }) {
+export default function TaskForm({ editingTask, onSubmit, onCancel, submitting, resetToken }) {
   const [form, setForm] = useState(emptyForm);
+  const fileInputRef = useRef(null);
 
+  // Re-runs whenever we start/stop editing a task AND after every successful
+  // submit (resetToken changes even when editingTask stays null, e.g. when
+  // creating several tasks in a row). type="file" inputs are uncontrolled in
+  // the DOM, so clearing React state alone doesn't clear the browser's
+  // displayed file name — it has to be reset on the element directly.
   useEffect(() => {
     if (editingTask) {
       setForm({
@@ -31,7 +37,10 @@ export default function TaskForm({ editingTask, onSubmit, onCancel, submitting }
     } else {
       setForm(emptyForm);
     }
-  }, [editingTask]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  }, [editingTask, resetToken]);
 
   function handleChange(e) {
     const { name, value, type, checked, files } = e.target;
@@ -94,7 +103,7 @@ export default function TaskForm({ editingTask, onSubmit, onCancel, submitting }
 
       <label>
         Вложение (PNG, JPEG, GIF, WEBP, PDF, до 5MB)
-        <input type="file" name="file" onChange={handleChange} />
+        <input type="file" name="file" ref={fileInputRef} onChange={handleChange} />
       </label>
 
       {editingTask && editingTask.attachment && editingTask.attachment.fileName && !form.file && (

@@ -1,6 +1,9 @@
 * {
   box-sizing: border-box;
 }
+.app__layout > * {
+  min-width: 0;
+}
 body {
   margin: 0;
   font-family: system-ui, Arial, sans-serif;
@@ -34,15 +37,17 @@ header h1 {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;  
+  overflow-wrap: anywhere;
 }
 .task-form label {
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
   gap: 4px;
+  min-width: 0; 
 }
 .task-form input,
-.task-form textarea,
 .task-form select {
   padding: 6px 8px;
   border: 1px solid #ccd0d8;
@@ -50,10 +55,21 @@ header h1 {
   font-size: 0.9rem;
   font-family: inherit;
 }
+.task-form textarea {
+  resize: vertical;    
+  max-width: 100%;       
+  width: 100%;
+  min-height: 60px;
+  font-family: inherit;
+}
 .checkbox-label {
   flex-direction: row !important;
-  align-items: center;
+  align-items: flex-start;      
   gap: 8px !important;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  word-break: break-word;      
+  overflow-wrap: anywhere;
 }
 .task-form__actions {
   display: flex;
@@ -78,6 +94,7 @@ button.danger {
 }
 .task-actions {
   display: flex;
+  flex-direction: column; 
   gap: 6px;
 }
 .filters {
@@ -91,13 +108,18 @@ button.danger {
   border: 1px solid #ccd0d8;
   border-radius: 4px;
 }
+.task-list-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  -webkit-overflow-scrolling: touch;
+}
 table.task-list {
   width: 100%;
+  min-width: 720px;
+  table-layout: fixed;
   border-collapse: collapse;
   background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 table.task-list th,
 table.task-list td {
@@ -106,24 +128,64 @@ table.task-list td {
   text-align: left;
   font-size: 0.9rem;
   vertical-align: top;
+  overflow: hidden;
+  white-space: normal;       
+  word-break: break-word;    
+  overflow-wrap: anywhere;   
 }
 table.task-list th {
   background: #f8f9fb;
   font-weight: 600;
 }
+/* Fixed widths for every column except "Название", which takes the remaining
+   space. This keeps the status badge and other short columns from being
+   squeezed onto multiple lines when the attachment column has a long file name. */
+table.task-list th:nth-child(2),
+table.task-list td:nth-child(2) {
+  width: 120px;
+}
+table.task-list th:nth-child(3),
+table.task-list td:nth-child(3) {
+  width: 110px;
+}
+table.task-list th:nth-child(4),
+table.task-list td:nth-child(4) {
+  width: 170px;
+}
+table.task-list th:nth-child(5),
+table.task-list td:nth-child(5) {
+  width: 150px;
+}
 .task-title {
   font-weight: 600;
+  color: var(--text);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .task-description {
-  color: #667;
-  font-size: 0.82rem;
-  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 3px;
+  line-height: 1.45;
+  white-space: pre-wrap;     
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .badge {
+  display: inline-block;
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 0.78rem;
   color: #fff;
+  white-space: nowrap;
+}
+.attachment-link {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 .badge--todo {
   background: #6b7280;
@@ -138,6 +200,21 @@ table.task-list th {
   text-align: center;
   padding: 24px;
   color: #667;
+}
+.task-row--overdue {
+  background: #fff1f2;
+}
+.due-date--overdue {
+  color: #dc2626;
+  font-weight: 600;
+}
+.overdue-tag {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #dc2626;
+  white-space: nowrap;
 }
 .error-banner {
   background: #fee2e2;
