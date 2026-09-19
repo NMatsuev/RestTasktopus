@@ -3,6 +3,7 @@ import TaskForm from './components/TaskForm.jsx';
 import TaskList from './components/TaskList.jsx';
 import ErrorBanner from './components/ErrorBanner.jsx';
 import { fetchTasks, createTask, updateTask, deleteTask, ApiError } from './api.js';
+import { TASK_STATUSES } from './constants/taskStatus';
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
@@ -96,7 +97,6 @@ export default function App() {
             resetToken={resetToken}
           />
         </section>
-
         <section className="app__list">
           <div className="filters">
             <input
@@ -107,9 +107,11 @@ export default function App() {
             />
             <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
               <option value="">Все статусы</option>
-              <option value="todo">Не начато</option>
-              <option value="in_progress">В процессе</option>
-              <option value="done">Выполнено</option>
+              {TASK_STATUSES.map((s) => (
+              <option key={s.value} value={s.value}>
+               {s.label}
+              </option>
+              ))}
             </select>
           </div>
 

@@ -1,10 +1,5 @@
 import React from 'react';
-
-const STATUS_LABELS = {
-  todo: 'Не начато',
-  in_progress: 'В процессе',
-  done: 'Выполнено',
-};
+import { STATUS_LABELS } from '../constants/taskStatus';
 
 function isOverdue(task) {
   if (!task.dueDate || task.status === 'done') return false;

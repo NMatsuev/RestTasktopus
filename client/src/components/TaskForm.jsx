@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-
-const STATUS_OPTIONS = [
-  { value: 'todo', label: 'Не начато' },
-  { value: 'in_progress', label: 'В процессе' },
-  { value: 'done', label: 'Выполнено' },
-];
+import { TASK_STATUSES } from '../constants/taskStatus';
 
 const emptyForm = {
   title: '',
@@ -19,11 +14,6 @@ export default function TaskForm({ editingTask, onSubmit, onCancel, submitting, 
   const [form, setForm] = useState(emptyForm);
   const fileInputRef = useRef(null);
 
-  // Re-runs whenever we start/stop editing a task AND after every successful
-  // submit (resetToken changes even when editingTask stays null, e.g. when
-  // creating several tasks in a row). type="file" inputs are uncontrolled in
-  // the DOM, so clearing React state alone doesn't clear the browser's
-  // displayed file name — it has to be reset on the element directly.
   useEffect(() => {
     if (editingTask) {
       setForm({
@@ -88,11 +78,9 @@ export default function TaskForm({ editingTask, onSubmit, onCancel, submitting, 
       <label>
         Статус
         <select name="status" value={form.status} onChange={handleChange}>
-          {STATUS_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
+        {TASK_STATUSES.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
         </select>
       </label>
 

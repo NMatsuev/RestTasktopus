@@ -1,29 +1,28 @@
-const mongoose = require('mongoose');
-
-const TASK_STATUSES = ['todo', 'in_progress', 'done'];
+const mongoose = require("mongoose");
+const { TASK_STATUSES } = require("../constants/taskStatus");
 
 const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'Название задачи обязательно'],
+      required: [true, "Название задачи обязательно"],
       trim: true,
-      minlength: [1, 'Название не может быть пустым'],
-      maxlength: [100, 'Название не должно превышать 100 символов'],
+      minlength: [1, "Название не может быть пустым"],
+      maxlength: [100, "Название не должно превышать 100 символов"],
     },
     description: {
       type: String,
       trim: true,
-      maxlength: [2000, 'Описание не должно превышать 2000 символов'],
-      default: '',
+      maxlength: [2000, "Описание не должно превышать 2000 символов"],
+      default: "",
     },
     status: {
       type: String,
       enum: {
         values: TASK_STATUSES,
-        message: 'Статус должен быть одним из: todo, in_progress, done',
+        message: `Статус должен быть одним из: ${TASK_STATUSES.join(", ")}`,
       },
-      default: 'todo',
+      default: "todo",
     },
     dueDate: {
       type: Date,
@@ -36,10 +35,10 @@ const taskSchema = new mongoose.Schema(
       size: { type: Number, default: null },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-const Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 Task.TASK_STATUSES = TASK_STATUSES;
 
 module.exports = Task;
