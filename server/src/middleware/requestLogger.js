@@ -20,11 +20,6 @@ const requestLogger = pinoHttp({
     if (res.statusCode >= 400) return "warn";
     return "info";
   },
-  customProps: (req) => ({
-    requestId: req.id,
-    userId: req.user ? req.user.id : null,
-    role: req.user ? req.user.role : null,
-  }),
   serializers: {
     req: (req) => ({ method: req.method, url: req.url }),
     res: (res) => ({ statusCode: res.statusCode }),
