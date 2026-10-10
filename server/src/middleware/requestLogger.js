@@ -21,6 +21,7 @@ const requestLogger = pinoHttp({
     return "info";
   },
   customProps: (req) => ({
+    requestId: req.id,
     userId: req.user ? req.user.id : null,
     role: req.user ? req.user.role : null,
   }),

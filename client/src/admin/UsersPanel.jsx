@@ -74,7 +74,8 @@ export default function UsersPanel() {
       {loading ? (
         <p className="task-list__status">Загрузка...</p>
       ) : (
-        <table className="task-list">
+        <div className="task-list-wrapper">
+        <table className="task-list users-table">
           <thead>
             <tr>
               <th>Email</th>
@@ -118,6 +119,7 @@ export default function UsersPanel() {
             })}
           </tbody>
         </table>
+         </div>
       )}
     </div>
   );

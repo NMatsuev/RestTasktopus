@@ -99,7 +99,6 @@ button.danger {
 table.task-list {
   width: 100%;
   min-width: 640px;
-  table-layout: fixed;
   border-collapse: collapse;
   background: #fff;
 }
@@ -110,35 +109,55 @@ table.task-list td {
   text-align: left;
   font-size: 0.9rem;
   vertical-align: top;
-  overflow: hidden;
 }
 table.task-list th {
   background: #f8f9fb;
   font-weight: 600;
 }
 table.task-list th:nth-child(2),
-table.task-list td:nth-child(2) {
-  width: 120px;
-}
+table.task-list td:nth-child(2) { width: 120px; }
 table.task-list th:nth-child(3),
-table.task-list td:nth-child(3) {
-  width: 110px;
-}
+table.task-list td:nth-child(3) { width: 110px; }
 table.task-list th:nth-child(4),
-table.task-list td:nth-child(4) {
-  width: 170px;
-}
+table.task-list td:nth-child(4) { width: 180px; }
 table.task-list th:nth-child(5),
-table.task-list td:nth-child(5) {
-  width: 150px;
+table.task-list td:nth-child(5) { width: 170px; }
+table.task-list td:nth-child(1) {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .task-title {
   font-weight: 600;
+  white-space: normal;
+  word-break: break-word;
 }
 .task-description {
   color: #667;
   font-size: 0.82rem;
   margin-top: 2px;
+  white-space: pre-wrap;       
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.task-actions {
+  display: flex;
+  flex-direction: column;      
+  gap: 6px;
+  align-items: stretch;
+}
+.task-actions button {
+  white-space: nowrap;
+}
+.task-form textarea {
+  resize: vertical;             
+  min-height: 80px;
+  max-width: 100%;
+  font-family: inherit;
+  padding: 6px 8px;
+  border: 1px solid #ccd0d8;
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 .badge {
   display: inline-block;
@@ -332,4 +351,46 @@ table.task-list td:nth-child(5) {
 .session-ua {
   word-break: break-word;
   white-space: normal;
+}
+
+.users-table {
+  table-layout: auto;  
+  min-width: 640px;    
+}
+
+
+.users-table th,
+.users-table td {
+  width: auto;
+}
+
+.users-table th:nth-child(1),
+.users-table td:nth-child(1) {
+  word-break: break-word;
+}
+
+.users-table td:nth-child(2) select {
+  width: 100%;
+  max-width: 140px;
+  padding: 6px 8px;
+  border: 1px solid #ccd0d8;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: #fff;
+}
+
+.users-table th:nth-child(3),
+.users-table td:nth-child(3) {
+  white-space: nowrap;
+}
+
+.users-table td.task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.users-table td.task-actions button {
+  white-space: nowrap;
 }

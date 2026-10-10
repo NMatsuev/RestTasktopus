@@ -1,5 +1,6 @@
 const pino = require("pino");
 const config = require("../config/env");
+const { getRequestId } = require("./requestContext");
 
 // Структурированные логи (JSON) с едиными полями: level, time, msg, + контекст.
 // В разработке используем pino-pretty, если он установлен
@@ -20,6 +21,10 @@ if (config.nodeEnv !== "production") {
 const logger = pino({
   level: config.logLevel,
   transport,
+  mixin() {
+    const requestId = getRequestId();
+    return requestId ? { requestId } : {};
+  },
   redact: {
     paths: [
       "req.headers.authorization",

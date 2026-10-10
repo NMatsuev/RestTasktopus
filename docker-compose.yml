@@ -13,30 +13,28 @@ services:
     container_name: taskmanager-server
     restart: unless-stopped
     environment:
-      - NODE_ENV=production
-      - MONGO_URI=mongodb://mongo:27017/taskmanager
-      - PORT=5000
-      - CLIENT_ORIGIN=http://localhost:3000
-      - LOG_LEVEL=info
-      # значения ниже подходят только для локального запуска/демо.
-      # Перед любым реальным развёртыванием замените их на собственные секреты,
-      # например: node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
-      - JWT_ACCESS_SECRET=dev-only-change-this-secret-in-real-deployments
-      - ACCESS_TOKEN_TTL_MINUTES=15
-      - REFRESH_TOKEN_TTL_DAYS=30
-      # Refresh-токен передаётся в httpOnly-cookie. true — только если это
-      # развёртывание реально обслуживается по HTTPS; при http://localhost
-      # оставляем false, иначе браузер откажется принимать cookie.
-      - COOKIE_SECURE=false
-      - LOGIN_MAX_ATTEMPTS=5
-      - LOGIN_LOCK_MINUTES=15
-      - LOGIN_RATE_WINDOW_MINUTES=15
-      - LOGIN_RATE_MAX_REQUESTS=20
-      - RESET_TOKEN_TTL_MINUTES=60
-      - SMTP_HOST=
-      - SMTP_FROM=Task Manager <no-reply@task-manager.local>
-      - ADMIN_EMAIL=admin@example.com
-      - ADMIN_PASSWORD=ChangeMe123!
+      NODE_ENV: production
+      MONGO_URI: "mongodb://mongo:27017/taskmanager"
+      PORT: "5000"
+      CLIENT_ORIGIN: "${CLIENT_ORIGIN:-http://localhost:3000}"
+      LOG_LEVEL: "${LOG_LEVEL:-info}"
+      JWT_ACCESS_SECRET: "${JWT_ACCESS_SECRET:-dev-only-change-this-secret-in-real-deployments}"
+      ACCESS_TOKEN_TTL_MINUTES: "${ACCESS_TOKEN_TTL_MINUTES:-15}"
+      REFRESH_TOKEN_TTL_DAYS: "${REFRESH_TOKEN_TTL_DAYS:-30}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
+      LOGIN_MAX_ATTEMPTS: "${LOGIN_MAX_ATTEMPTS:-5}"
+      LOGIN_LOCK_MINUTES: "${LOGIN_LOCK_MINUTES:-15}"
+      LOGIN_RATE_WINDOW_MINUTES: "${LOGIN_RATE_WINDOW_MINUTES:-15}"
+      LOGIN_RATE_MAX_REQUESTS: "${LOGIN_RATE_MAX_REQUESTS:-20}"
+      RESET_TOKEN_TTL_MINUTES: "${RESET_TOKEN_TTL_MINUTES:-60}"
+      SMTP_HOST: "${SMTP_HOST:-}"
+      SMTP_PORT: "${SMTP_PORT:-587}"
+      SMTP_SECURE: "${SMTP_SECURE:-false}"
+      SMTP_USER: "${SMTP_USER:-}"
+      SMTP_PASS: "${SMTP_PASS:-}"
+      SMTP_FROM: "${SMTP_FROM:-Task Manager <no-reply@task-manager.local>}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@example.com}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD:-ChangeMe123!}"
     volumes:
       - uploads-data:/app/uploads
     depends_on:
