@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const TASK_STATUSES = require("../constants/taskStatus");
+const { TASK_STATUSES } = require("../constants/taskStatus");
 
 const taskSchema = new mongoose.Schema(
   {
