@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const { TASK_STATUSES } = require("../constants/taskStatus");
+
+const TASK_STATUSES = require("../constants/taskStatus");
 
 const taskSchema = new mongoose.Schema(
   {
@@ -20,7 +21,7 @@ const taskSchema = new mongoose.Schema(
       type: String,
       enum: {
         values: TASK_STATUSES,
-        message: `Статус должен быть одним из: ${TASK_STATUSES.join(", ")}`,
+        message: "Статус должен быть одним из: todo, in_progress, done",
       },
       default: "todo",
     },
@@ -33,6 +34,14 @@ const taskSchema = new mongoose.Schema(
       fileName: { type: String, default: null },
       mimeType: { type: String, default: null },
       size: { type: Number, default: null },
+    },
+    // Кто создал задачу — используется для структурированных логов и как задел
+    // под более гранулярные правила доступа в будущем (например, "менеджер
+    // может удалять только свои задачи").
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
     },
   },
   { timestamps: true },

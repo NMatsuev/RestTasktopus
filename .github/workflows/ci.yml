@@ -1,0 +1,101 @@
+name: CI
+
+"on":
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+  workflow_dispatch: {}
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  server:
+    name: Server — lint & test
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })' --quiet"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+        env:
+          NODE_ENV: test
+          TEST_MONGO_URI: mongodb://127.0.0.1:27017/taskmanager_ci
+          JWT_ACCESS_SECRET: ci-test-secret-not-for-production
+          ACCESS_TOKEN_TTL_MINUTES: '15'
+          REFRESH_TOKEN_TTL_DAYS: '30'
+          LOGIN_MAX_ATTEMPTS: '5'
+          LOGIN_LOCK_MINUTES: '15'
+          LOGIN_RATE_WINDOW_MINUTES: '15'
+          LOGIN_RATE_MAX_REQUESTS: '1000'
+          RESET_TOKEN_TTL_MINUTES: '60'
+
+  client:
+    name: Client — lint & build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: client
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build production bundle
+        run: npm run build
+
+  docker-build:
+    name: Docker images build (smoke test)
+    runs-on: ubuntu-latest
+    needs: [server, client]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build server image
+        run: docker build -t task-manager-server:ci ./server
+
+      - name: Build client image
+        run: docker build -t task-manager-client:ci ./client

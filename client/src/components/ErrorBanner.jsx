@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function ErrorBanner({ error, onClose }) {
   if (!error) return null;
 

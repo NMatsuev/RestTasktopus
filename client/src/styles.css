@@ -1,9 +1,6 @@
 * {
   box-sizing: border-box;
 }
-.app__layout > * {
-  min-width: 0;
-}
 body {
   margin: 0;
   font-family: system-ui, Arial, sans-serif;
@@ -37,17 +34,15 @@ header h1 {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-width: 0;  
-  overflow-wrap: anywhere;
 }
 .task-form label {
   display: flex;
   flex-direction: column;
   font-size: 0.9rem;
   gap: 4px;
-  min-width: 0; 
 }
 .task-form input,
+.task-form textarea,
 .task-form select {
   padding: 6px 8px;
   border: 1px solid #ccd0d8;
@@ -55,21 +50,10 @@ header h1 {
   font-size: 0.9rem;
   font-family: inherit;
 }
-.task-form textarea {
-  resize: vertical;    
-  max-width: 100%;       
-  width: 100%;
-  min-height: 60px;
-  font-family: inherit;
-}
 .checkbox-label {
   flex-direction: row !important;
-  align-items: flex-start;      
+  align-items: center;
   gap: 8px !important;
-  font-size: 0.85rem;
-  line-height: 1.3;
-  word-break: break-word;      
-  overflow-wrap: anywhere;
 }
 .task-form__actions {
   display: flex;
@@ -94,7 +78,6 @@ button.danger {
 }
 .task-actions {
   display: flex;
-  flex-direction: column; 
   gap: 6px;
 }
 .filters {
@@ -112,11 +95,10 @@ button.danger {
   overflow-x: auto;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  -webkit-overflow-scrolling: touch;
 }
 table.task-list {
   width: 100%;
-  min-width: 720px;
+  min-width: 640px;
   table-layout: fixed;
   border-collapse: collapse;
   background: #fff;
@@ -129,17 +111,11 @@ table.task-list td {
   font-size: 0.9rem;
   vertical-align: top;
   overflow: hidden;
-  white-space: normal;       
-  word-break: break-word;    
-  overflow-wrap: anywhere;   
 }
 table.task-list th {
   background: #f8f9fb;
   font-weight: 600;
 }
-/* Fixed widths for every column except "Название", which takes the remaining
-   space. This keeps the status badge and other short columns from being
-   squeezed onto multiple lines when the attachment column has a long file name. */
 table.task-list th:nth-child(2),
 table.task-list td:nth-child(2) {
   width: 120px;
@@ -158,18 +134,11 @@ table.task-list td:nth-child(5) {
 }
 .task-title {
   font-weight: 600;
-  color: var(--text);
-  word-break: break-word;
-  overflow-wrap: anywhere;
 }
 .task-description {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  margin-top: 3px;
-  line-height: 1.45;
-  white-space: pre-wrap;     
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  color: #667;
+  font-size: 0.82rem;
+  margin-top: 2px;
 }
 .badge {
   display: inline-block;
@@ -244,4 +213,123 @@ table.task-list td:nth-child(5) {
   padding: 8px 14px;
   border-radius: 6px;
   margin-bottom: 16px;
+}
+
+/* --- Аутентификация / шапка / навигация --- */
+.app--centered {
+  max-width: 420px;
+  padding-top: 48px;
+}
+.app--centered header {
+  text-align: center;
+}
+.auth-form {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-form h2 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+}
+.auth-form__hint {
+  margin: -8px 0 0;
+  color: #667;
+  font-size: 0.85rem;
+}
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  gap: 4px;
+}
+.auth-form input {
+  padding: 8px 10px;
+  border: 1px solid #ccd0d8;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.auth-form__links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+.link-button {
+  background: none;
+  color: #2563eb;
+  padding: 0;
+  font-size: 0.85rem;
+  text-align: left;
+}
+.app__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.app__header h1 {
+  margin: 0;
+}
+.app__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+.app__user-email {
+  color: #444;
+}
+.badge--role {
+  background: #2563eb;
+}
+.badge--locked {
+  background: #dc2626;
+}
+.app__nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e2e5ea;
+}
+.nav-tab {
+  background: none;
+  color: #444;
+  padding: 10px 14px;
+  border-radius: 4px 4px 0 0;
+  font-size: 0.92rem;
+}
+.nav-tab--active {
+  background: #fff;
+  color: #2563eb;
+  font-weight: 600;
+  box-shadow: 0 -1px 0 0 #e2e5ea inset;
+}
+.app__layout--readonly {
+  grid-template-columns: 1fr;
+}
+.panel {
+  background: transparent;
+}
+.panel__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.panel__header h2 {
+  margin: 0;
+}
+.session-ua {
+  word-break: break-word;
+  white-space: normal;
 }

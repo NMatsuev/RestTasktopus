@@ -1,5 +1,4 @@
-import React from 'react';
-import { STATUS_LABELS } from '../constants/taskStatus';
+import {STATUS_LABELS} from '../constants/taskStatus';
 
 function isOverdue(task) {
   if (!task.dueDate || task.status === 'done') return false;
@@ -10,7 +9,7 @@ function isOverdue(task) {
   return due < today;
 }
 
-export default function TaskList({ tasks, loading, onEdit, onDelete }) {
+export default function TaskList({ tasks, loading, onEdit, onDelete, canEdit = true }) {
   if (loading) {
     return <p className="task-list__status">Загрузка задач...</p>;
   }
@@ -28,7 +27,7 @@ export default function TaskList({ tasks, loading, onEdit, onDelete }) {
             <th>Статус</th>
             <th>Срок</th>
             <th>Вложение</th>
-            <th>Действия</th>
+            {canEdit && <th>Действия</th>}
           </tr>
         </thead>
         <tbody>
@@ -66,12 +65,14 @@ export default function TaskList({ tasks, loading, onEdit, onDelete }) {
                     '—'
                   )}
                 </td>
-                <td className="task-actions">
-                  <button onClick={() => onEdit(task)}>Изменить</button>
-                  <button className="danger" onClick={() => onDelete(task)}>
-                    Удалить
-                  </button>
-                </td>
+                {canEdit && (
+                  <td className="task-actions">
+                    <button onClick={() => onEdit(task)}>Изменить</button>
+                    <button className="danger" onClick={() => onDelete(task)}>
+                      Удалить
+                    </button>
+                  </td>
+                )}
               </tr>
             );
           })}

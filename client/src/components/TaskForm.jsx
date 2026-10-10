@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { TASK_STATUSES } from '../constants/taskStatus';
 
 const emptyForm = {
@@ -13,7 +13,6 @@ const emptyForm = {
 export default function TaskForm({ editingTask, onSubmit, onCancel, submitting, resetToken }) {
   const [form, setForm] = useState(emptyForm);
   const fileInputRef = useRef(null);
-
   useEffect(() => {
     if (editingTask) {
       setForm({
@@ -78,9 +77,11 @@ export default function TaskForm({ editingTask, onSubmit, onCancel, submitting, 
       <label>
         Статус
         <select name="status" value={form.status} onChange={handleChange}>
-        {TASK_STATUSES.map((opt) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
+          {TASK_STATUSES.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </label>
 

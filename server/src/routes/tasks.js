@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const Task = require('../models/Task');
 const { upload, UPLOAD_DIR } = require('../middleware/upload');
+const { authenticate, authorize } = require('../middleware/auth');
 const {
   taskCreateRules,
   taskUpdateRules,
@@ -11,6 +12,14 @@ const {
 } = require('../middleware/validators');
 
 const router = express.Router();
+
+// Ролевая модель доступа к задачам:
+//  - viewer  — только чтение (GET)
+//  - manager — полный CRUD над задачами
+//  - admin   — полный CRUD над задачами + управление пользователями (routes/users.js)
+// Доступ к задачам вообще требует аутентификации — анонимных запросов нет.
+router.use(authenticate);
+const canWrite = authorize('admin', 'manager');
 
 function buildAttachment(file) {
   if (!file) return undefined;
@@ -61,9 +70,10 @@ router.get('/:id', idParamRule, handleValidation, async (req, res, next) => {
   }
 });
 
-// POST /api/tasks
+// POST /api/tasks (admin, manager)
 router.post(
   '/',
+  canWrite,
   upload.single('attachment'),
   taskCreateRules,
   handleValidation,
@@ -76,6 +86,7 @@ router.post(
         status,
         dueDate: dueDate || null,
         attachment: buildAttachment(req.file),
+        createdBy: req.user.id,
       });
       await task.save();
       res.status(201).json(task);
@@ -85,9 +96,10 @@ router.post(
   }
 );
 
-// PUT /api/tasks/:id
+// PUT /api/tasks/:id (admin, manager)
 router.put(
   '/:id',
+  canWrite,
   idParamRule,
   upload.single('attachment'),
   taskUpdateRules,
@@ -123,8 +135,8 @@ router.put(
   }
 );
 
-// DELETE /api/tasks/:id
-router.delete('/:id', idParamRule, handleValidation, async (req, res, next) => {
+// DELETE /api/tasks/:id (admin, manager)
+router.delete('/:id', canWrite, idParamRule, handleValidation, async (req, res, next) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
     if (!task) {
