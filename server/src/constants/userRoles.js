@@ -1,3 +1,1 @@
-const USER_ROLES = ["viewer", "manager", "admin"];
-
-module.exports = USER_ROLES;
+export const USER_ROLES = ["viewer", "manager", "admin"];
