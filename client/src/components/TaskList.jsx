@@ -9,7 +9,7 @@ function isOverdue(task) {
   return due < today;
 }
 
-export default function TaskList({ tasks, loading, onEdit, onDelete, canEdit = true }) {
+export default function TaskList({ tasks, loading, onEdit, onDelete, canEdit = true, canModify = () => true }) {
   if (loading) {
     return <p className="task-list__status">Загрузка задач...</p>;
   }
@@ -65,14 +65,18 @@ export default function TaskList({ tasks, loading, onEdit, onDelete, canEdit = t
                     '—'
                   )}
                 </td>
-                {canEdit && (
+                  {canEdit && (
                   <td className="task-actions">
-                    <button onClick={() => onEdit(task)}>Изменить</button>
-                    <button className="danger" onClick={() => onDelete(task)}>
-                      Удалить
-                    </button>
+                  {canModify(task) ? (
+                    <>
+                      <button onClick={() => onEdit(task)}>Изменить</button>
+                      <button className="danger" onClick={() => onDelete(task)}>Удалить</button>
+                    </>
+                  ) : (
+                    <span title="Менеджер может изменять только свои задачи">—</span>
+                  )}
                   </td>
-                )}
+                  )}
               </tr>
             );
           })}

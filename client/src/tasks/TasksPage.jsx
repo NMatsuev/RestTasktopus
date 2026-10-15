@@ -8,6 +8,9 @@ import { useAuth } from '../auth/AuthContext.jsx';
 export default function TasksPage() {
   const { user } = useAuth();
   const canEdit = user.role === 'admin' || user.role === 'manager';
+  function canModifyTask(task) {
+    return user.role === 'admin' || (user.role === 'manager' && task.createdBy === user.id);
+  }
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -121,6 +124,7 @@ export default function TasksPage() {
             onEdit={setEditingTask}
             onDelete={handleDelete}
             canEdit={canEdit}
+            canModify={canModifyTask}
           />
         </section>
       </div>
