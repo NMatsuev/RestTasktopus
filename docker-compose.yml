@@ -35,6 +35,11 @@ services:
       SMTP_FROM: "${SMTP_FROM:-Task Manager <no-reply@task-manager.local>}"
       ADMIN_EMAIL: "${ADMIN_EMAIL:-admin@example.com}"
       ADMIN_PASSWORD: "${ADMIN_PASSWORD:-ChangeMe123!}"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     volumes:
       - uploads-data:/app/uploads
     depends_on:

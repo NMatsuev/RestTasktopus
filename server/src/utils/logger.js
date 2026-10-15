@@ -3,7 +3,6 @@ const config = require("../config/env");
 const { getRequestContext } = require("./requestContext");
 
 // Структурированные логи (JSON) с едиными полями: level, time, msg, + контекст.
-// В разработке используем pino-pretty, если он установлен
 let transport;
 if (config.nodeEnv !== "production") {
   try {

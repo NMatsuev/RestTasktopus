@@ -7,8 +7,7 @@ import ResetPasswordForm from './auth/ResetPasswordForm.jsx';
 import SessionsPanel from './auth/SessionsPanel.jsx';
 import UsersPanel from './admin/UsersPanel.jsx';
 import TasksPage from './tasks/TasksPage.jsx';
-
-const ROLE_LABELS = { viewer: 'Наблюдатель', manager: 'Менеджер', admin: 'Администратор' };
+import { ROLE_LABELS } from '../constants/taskStatus';
 
 function AuthGate() {
   const [view, setView] = useState('login'); // 'login' | 'register' | 'forgot'

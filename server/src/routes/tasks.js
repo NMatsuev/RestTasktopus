@@ -11,6 +11,7 @@ const {
   idParamRule,
   handleValidation,
 } = require("../middleware/validators");
+const logger = require("../utils/logger");
 
 const router = express.Router();
 
@@ -61,6 +62,10 @@ function removeAttachmentFile(attachment) {
     fs.unlink(filePath, (err) => {
       if (err && err.code !== "ENOENT") {
         console.error("Не удалось удалить файл вложения:", err);
+        logger.error(
+          { err, fileName: attachment.fileName },
+          "Не удалось удалить файл вложения",
+        );
       }
     });
   }
